@@ -1,27 +1,39 @@
-FROM php:7.1-fpm
+FROM php:7.0-fpm
 
-RUN apk add --update \
+RUN apt-get update && apt-get install -y \
     vim \
     git \
+    wget \
     unzip \
-    icu-dev \
-    libmcrypt-dev \
+    libicu-dev \
     libpng-dev \
-    jpeg-dev \
+    libfreetype6-dev \
+    libmcrypt-dev \
+    libjpeg-dev \
+    cron \
+    logrotate \
     nodejs \
-    zlib-dev \
+    npm \
+    ca-certificates \
+    openssl \
+    zlib1g-dev \
     imagemagick \
-    imagemagick-dev \
     ghostscript \
     autoconf \
-    pcre-dev \
+    libpcre3-dev \
     libtool \
-    python \
     gcc \
     make \
     g++ \
     python \
-    && upgrade
+    libffi-dev \
+    ruby \
+    ruby-dev \
+    libxml2-dev
+
+RUN gem install sass compass --no-ri --no-rdoc
+
+#RUN docker-php-ext-enable imagemagick
 
 RUN docker-php-ext-install iconv pdo pdo_mysql mysqli mbstring intl json gd mcrypt zip bcmath
 
@@ -30,11 +42,10 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN composer --version
 
 # install dependencies
-RUN npm install --quiet
+#RUN npm install --quiet
 RUN npm install gulp-cli -g 
 RUN npm install gulp -D
 RUN npm install -g bower bower-npm-resolver
-RUN npm i gulp
 
 # Set timezone
 RUN rm /etc/localtime
