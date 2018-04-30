@@ -42,6 +42,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN composer --version
 
 # install dependencies
+RUN ln -s /usr/bin/nodejs /usr/bin/node
 RUN npm install gulp-cli -g 
 RUN npm install gulp -D
 RUN npm install -g bower bower-npm-resolver
