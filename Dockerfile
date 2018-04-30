@@ -1,4 +1,4 @@
-FROM php:7.0-fpm
+FROM php:7.1-fpm
 
 RUN apt-get update && apt-get install -y \
     vim \
@@ -35,7 +35,7 @@ RUN apt-get update && apt-get install -y \
 RUN gem install sass compass --no-ri --no-rdoc
 
 RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
-RUN docker-php-ext-install iconv pdo pdo_mysql pdo_pgsql pgsql mysqli mbstring intl json gd mcrypt zip bcmath
+RUN docker-php-ext-install iconv pdo pdo_mysql pdo_pgsql pgsql mysqli mbstring intl json gd mcrypt zip bcmath pcntl
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
