@@ -29,20 +29,19 @@ RUN apt-get update && apt-get install -y \
     libffi-dev \
     ruby \
     ruby-dev \
-    libxml2-dev
+    libxml2-dev \
+    libpq-dev
 
 RUN gem install sass compass --no-ri --no-rdoc
 
-#RUN docker-php-ext-enable imagemagick
-
-RUN docker-php-ext-install iconv pdo pdo_mysql mysqli mbstring intl json gd mcrypt zip bcmath
+RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
+RUN docker-php-ext-install iconv pdo pdo_mysql pdo_pgsql pgsql mysqli mbstring intl json gd mcrypt zip bcmath
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer --version
 
 # install dependencies
-#RUN npm install --quiet
 RUN npm install gulp-cli -g 
 RUN npm install gulp -D
 RUN npm install -g bower bower-npm-resolver
