@@ -1,55 +1,33 @@
-FROM php:7.1-fpm
+FROM php:7.3.6-fpm-alpine
 
-RUN apt-get update && apt-get install -y \
+RUN apk add --update \
+    tzdata \
     vim \
     git \
-    wget \
     unzip \
-    libicu-dev \
+    wget \
+    gnupg \
+    icu-dev \
     libpng-dev \
-    libfreetype6-dev \
+    jpeg-dev \
     libmcrypt-dev \
-    libjpeg-dev \
-    cron \
+    libzip-dev \
+    zlib-dev \
     logrotate \
-    nodejs \
-    npm \
     ca-certificates \
-    openssl \
-    zlib1g-dev \
-    imagemagick \
-    ghostscript \
-    autoconf \
-    libpcre3-dev \
-    libtool \
-    gcc \
-    make \
-    g++ \
-    python \
-    libffi-dev \
-    ruby \
-    ruby-dev \
-    libxml2-dev \
-    libpq-dev
+    supervisor \
+    nginx
 
-RUN gem install sass compass --no-ri --no-rdoc
+RUN update-ca-certificates && apk add openssl
 
-RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
-RUN docker-php-ext-install iconv pdo pdo_mysql pdo_pgsql pgsql mysqli mbstring intl json gd mcrypt zip bcmath pcntl
+RUN docker-php-ext-install iconv pdo pdo_mysql mbstring intl json gd zip bcmath
 
-# Install Composer
+# Install Composer and global deps
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer --version
-
-# install dependencies
-RUN ln -s /usr/bin/nodejs /usr/bin/node
-RUN npm install gulp-cli -g 
-RUN npm install gulp -D
-RUN npm install -g bower bower-npm-resolver
+RUN composer global require hirak/prestissimo
 
 # Set timezone
-RUN rm /etc/localtime
+# RUN rm /etc/localtime
 RUN ln -s /usr/share/zoneinfo/UTC /etc/localtime
-RUN "date"
 
 WORKDIR /var/www
