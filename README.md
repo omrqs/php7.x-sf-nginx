@@ -1,2 +1,2 @@
-# php7.1-laravel-debian
-For Laravel projects
+# php7.x-sf-nginx
+For sf projects with nginx has webserver
