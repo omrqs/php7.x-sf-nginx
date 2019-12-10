@@ -1,6 +1,6 @@
-FROM php:7.3.6-fpm-alpine
+FROM php:7.4-fpm-alpine
 
-RUN apk add --update \
+RUN apk add --update --no-cache $PHPIZE_DEPS \
     tzdata \
     vim \
     git \
@@ -18,9 +18,12 @@ RUN apk add --update \
     supervisor \
     nginx
 
+RUN pecl install xdebug-2.9.0
+
 RUN update-ca-certificates && apk add openssl
 
-RUN docker-php-ext-install iconv pdo pdo_mysql mbstring intl json gd zip bcmath pcntl
+RUN docker-php-ext-install opcache pdo_mysql intl json gd zip bcmath pcntl
+RUN docker-php-ext-enable xdebug
 
 # Install Composer and global deps
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -28,7 +31,6 @@ RUN composer global require hirak/prestissimo friendsofphp/php-cs-fixer
 RUN export PATH="$PATH:$HOME/.composer/vendor/bin"
 
 # Set timezone
-# RUN rm /etc/localtime
 RUN ln -s /usr/share/zoneinfo/UTC /etc/localtime
 
 WORKDIR /var/www
