@@ -18,12 +18,10 @@ RUN apk add --update --no-cache $PHPIZE_DEPS \
     supervisor \
     nginx
 
-RUN pecl install xdebug-2.9.0
-
 RUN update-ca-certificates && apk add openssl
 
 RUN docker-php-ext-install opcache pdo_mysql intl json gd zip bcmath pcntl
-RUN docker-php-ext-enable xdebug opcache
+RUN docker-php-ext-enable opcache
 
 # Install Composer and global deps
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
