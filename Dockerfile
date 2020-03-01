@@ -2,6 +2,7 @@ FROM php:7.4-fpm-alpine
 
 RUN apk add --virtual --update --no-cache $PHPIZE_DEPS \
     openssl \
+    git \
     tzdata \
     unzip \
     gnupg \
